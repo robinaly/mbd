@@ -1,4 +1,101 @@
-# docker-stacks
+# Docker Image For Managing Big Data
+
+The docker image for the managing big data course is based on the
+pyspark docker image from [docker
+stacks](https://github.com/jupyter/docker-stacks/).
+
+## Building the Image
+
+The image is designed to run in the home directory of the teacher.
+To avoid having to set the directory to world-writable, we have to
+configure the docker containers to run under the same user id. As
+there many files associated with the user in the docker image,
+dynamically changing the user id and username in the ``docker run``
+costs a lot of time.  Instead, we chose for the solution of modifying
+the base configuration to reflect the userid of the teacher. To
+update this, change the following lines in ``base-notebook/Dockerfile``:
+
+    ENV NB_USER datacamp
+    ENV NB_UID 17685226
+
+to
+
+    ENV NB_USER $TEACHER_USERNAME
+    ENV NB_UID $USERID_TEACHER
+
+where ``$TEACHER_USERNAME`` is the username of the teacher and
+``$USERID_TEACHER`` is the corresponding unix user id. Unfortunately,
+this solution requires re-building the whole stack until
+``pyspark-notebook``. This is done in the script ``build.sh``.
+
+## Running A Course
+
+To run a course, one container has to be started per user. This is
+achieved by creating a google spread sheet file containing all users
+(teachers and students). The schema and some sample data looks as
+follows:
+
+| SNumber | Name   | LastName | Email | mbd_url                             | mbd_server | mbd_port | Password | Admin |
+| ------- | ----   | -------- | ----  | -------                             | ---------- | -------- | -------- | ------ |
+| mXXXXXX | John   | Smith    | XXX   | http://farm01.ewi.utwente.nl:20000/ | farm01     | 20000    | W7pyhH0f | FALSE |
+| sYYYYYY | Babara | Smith    | YYYY  | http://farm03.ewi.utwente.nl:20001/ | farm03     | 20001    | IBCsaFwu | FALSE |
+
+This spreadsheet can be initially filled by importing a userlist from
+blackboard. These are the meanings for the non-obvious fields:
+
+* ``mbd_server``: the server the notebook of this user should be run
+* ``mbd_port``: the external port on which the notebook container will listen
+* ``mbd_url``: A string function (using CONCAT()) that forms an URL suitable to be mailed to students.
+* ``Password``: The password for the notebook (see below).
+* ``Admin``: TRUE/FALSE, whether the user should be a admin user.  
+
+To generate the password for ``Password`` the following spreadsheet
+function was used (Using Tools / Script Editor)
+
+    function genPass(l) {
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var text = "";
+      for( var i=0; i < l; i++ ) 
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+       return text;
+    }
+
+Once the spreadsheet is created, two files have to be edited:
+
+* ``hosts``: this file contains all the hosts on which docker containers will run.
+* ``sync.sh``: this script that starts the docker containers by copying the spreadsheet 
+  and the script ``bin/manage_nb.py`` to all hosts and then executing the script.
+
+If the script ``sync.sh`` is now invoked it starts the containers on the hosts indicated in the mbd_server
+field. The directory structure is the following:
+
+<pre>
+├── bin
+│   ├── build.sh
+│   ├── create_release.sh
+│   ├── distribute_release.sh
+│   ├── insertTOC.py
+│   ├── manage_nbs.py
+│   └── removeSolutions.py
+├── students
+│   ├── sXXXXX
+├── teacher
+│   ├── assignments
+│   │   ├── assignment1
+│   │   └── assignment2
+│   └── solutions
+│       ├── assignment1
+│       └── assignment2
+└── users.csv
+</pre>
+  
+Once the containers are started, the users should be informed using
+the downloaded csv file. In the past, the Thunderbird add-on Mail
+Merge was used.
+
+
+# Old Readme from docker-stacks
 
 [![Build Status](https://travis-ci.org/jupyter/docker-stacks.svg?branch=master)](https://travis-ci.org/jupyter/docker-stacks)
 [![Join the chat at https://gitter.im/jupyter/jupyter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jupyter/jupyter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

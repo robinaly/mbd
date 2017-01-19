@@ -36,8 +36,8 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
 ENV SHELL /bin/bash
-ENV NB_USER jovyan
-ENV NB_UID 1000
+ENV NB_USER datacamp
+ENV NB_UID 17685226
 ENV HOME /home/$NB_USER
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
