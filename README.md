@@ -4,6 +4,14 @@ The docker image for the managing big data course is based on the
 pyspark docker image from [docker
 stacks](https://github.com/jupyter/docker-stacks/).
 
+## Overview
+
+This project assumes that a teacher (or operator) runs one docker container of
+a certain image for each student in a course. The containers are distributed over
+a set of hosts.
+
+[![Overview](overview.png)](http://interactive.blockdiag.com/?compression=deflate&src=eJxtkMEKwjAMhu99irK7B-dFGPNFRCRrs62sNCPNEBXf3QxhHrpj_nz5_yRdJDf5AIN9G-KASUACJdvamVgYgjTGYw9LlHtPSXJ4oTbPjTFDnhnB5xFR7OFiEwl2RJO9RugwttVjQKluShYdQXAj8jayUhukViNlOW4052dye0hdSqdSSo35-Wnt9AQICfnv7vUBugovaY0oyXpP1JjPF9UDa7A)
+
 ## Building the Image
 
 The image is designed to run in the home directory of the teacher.
