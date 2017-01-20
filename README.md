@@ -41,7 +41,7 @@ this solution requires re-building the whole stack until
 To run a course, one container has to be started per user. This is
 achieved by creating a google spread sheet file containing all users
 (teachers and students). The schema and some sample data looks as
-follows:
+follows (see [here](https://docs.google.com/spreadsheets/d/1-B2VSvY8iyBNxeTRmxve7-283pKBC56RSuB6_clDhVw/edit?usp=sharing) for a template):
 
 | SNumber | Name   | LastName | Email | mbd_url                             | mbd_server | mbd_port | Password | Admin |
 | ------- | ----   | -------- | ----  | -------                             | ---------- | -------- | -------- | ------ |
