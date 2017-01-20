@@ -75,32 +75,42 @@ Once the spreadsheet is created, two files have to be edited:
 * ``sync.sh``: this script that starts the docker containers by copying the spreadsheet 
   and the script ``bin/manage_nb.py`` to all hosts and then executing the script.
 
-If the script ``sync.sh`` is now invoked it starts the containers on the hosts indicated in the mbd_server
-field. The directory structure is the following:
+If the script ``sync.sh`` is invoked it starts the containers on the hosts indicated in the mbd_server
+field. 
+
+Once the containers are started, the users should be informed using
+the downloaded csv file. In the past, the Thunderbird add-on Mail
+Merge was used.
+
+## Creating Assignments
+
+To understand how assignments can be created, one has to understand the directory structure, where files for this course are stored, which is the following:
 
 <pre>
-├── bin
+├── bin                         these are utility scripts
 │   ├── build.sh
 │   ├── create_release.sh
 │   ├── distribute_release.sh
 │   ├── insertTOC.py
 │   ├── manage_nbs.py
 │   └── removeSolutions.py
-├── students
+├── students                    this folder contains one folder per student, containing all his submissions.
 │   ├── sXXXXX
+│   ├── sYYYYY
 ├── teacher
-│   ├── assignments
+│   ├── assignments             this folder contains a version of the assignments that is ready to be distributed to students
 │   │   ├── assignment1
 │   │   └── assignment2
-│   └── solutions
+│   └── solutions               this folder contains assignments together with their solutions.
 │       ├── assignment1
 │       └── assignment2
 └── users.csv
 </pre>
-  
-Once the containers are started, the users should be informed using
-the downloaded csv file. In the past, the Thunderbird add-on Mail
-Merge was used.
+
+To produce an assignment you can follow this procedure:
+1. Create a folder in ``teacher/solutions``, say ``assignment3``. Solutions to exercies should be enclosed in ###BEGIN SOLUTION ###END SOLUTION markers.
+2. Inside an administrator notebook open a termina, and call ``bin/create_release.sh assignment3``, which first removes all solutions between the given markers and saves these files under ``teacher/assignments/assignment3``.
+3. Call ``bin/distribute_release.sh assignment3``, which copies ``teacher/assignments/assignment3`` into the directory of each student under ``students/``.
 
 
 # Old Readme from docker-stacks
