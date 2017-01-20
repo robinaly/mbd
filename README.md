@@ -108,6 +108,7 @@ To understand how assignments can be created, one has to understand the director
 </pre>
 
 To produce an assignment you can follow this procedure:
+
 1. Create a folder in ``teacher/solutions``, say ``assignment3``. Solutions to exercies should be enclosed in ###BEGIN SOLUTION ###END SOLUTION markers.
 2. Inside an administrator notebook open a termina, and call ``bin/create_release.sh assignment3``, which first removes all solutions between the given markers and saves these files under ``teacher/assignments/assignment3``.
 3. Call ``bin/distribute_release.sh assignment3``, which copies ``teacher/assignments/assignment3`` into the directory of each student under ``students/``.
